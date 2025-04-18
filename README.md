@@ -388,7 +388,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
    ipconfig /all
 4. Login to the Domain:
    - Reboot the machine
-   -  When you go to login, select "Other User", and verify the domain the login is pointing to is "DEMODOMAIN". Login using the credentials of a user you created 
+   -  When you go to login, select "Other User", and verify the domain the login is pointing to is "JK". Login using the credentials of a user you created 
    earlier under the IT or HR organizational unit.
    
 ## Phase 5: Kali Linux Brute Force Attack on the Target Machine
