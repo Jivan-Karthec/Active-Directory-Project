@@ -37,7 +37,7 @@ This hands-on experience enhances foundational skills in cybersecurity, virtuali
 - **Oracle VM VirtualBox**: Virtualization platform
 - **Windows 10 & Server 2025**: Target and domain controller
 - **Kali Linux**: Attacker machine
-- **Ubuntu Server (22.04.4 LTS)**: Splunk Server host
+- **Ubuntu Server 24.04.2 LTS**: Splunk Server host
 - **Splunk Enterprise**: Centralized log analysis platform
 - **Splunk Universal Forwarder**: Forwards logs from endpoints
 - **Sysmon (System Monitor)**: Monitors endpoint-level events
@@ -68,7 +68,7 @@ Download from https://www.virtualbox.org/. Install the software with all necessa
 - Install Desktop Experience version.
 
 #### d. **Ubuntu Server**
-- Download from https://ubuntu.com/server (v22.04.4 LTS)
+- Download from https://ubuntu.com/server 24.04.2 LTS
 - Allocate: 4096MB RAM, 2 CPUs, 50GB disk
 - Install and update system:  
   `sudo apt-get update && sudo apt-get upgrade -y`
