@@ -5,7 +5,8 @@ This project involves building a comprehensive virtual cybersecurity lab using O
 
 The lab integrates advanced tools such as Splunk for log analysis, Sysmon for deep system monitoring, and Universal Forwarder for log forwarding. Attack simulations are conducted using Crowbar and Atomic Red Team (ART), while PowerShell is used for automation. Remote Desktop is enabled on Windows machines, and all systems are joined to an Active Directory domain.
 
-![Lab Diagram](ActiveDirectoryLab.jpg)  
+![AD drawio](https://github.com/user-attachments/assets/796b3216-aa96-47fa-9ec6-cfa62e0234c8)
+  
 *Figure 1: Active Directory Lab Architecture*
 
 ---
@@ -34,7 +35,7 @@ This hands-on experience enhances foundational skills in cybersecurity, virtuali
 
 ## Tools and Technologies
 - **Oracle VM VirtualBox**: Virtualization platform
-- **Windows 10 & Server 2022**: Target and domain controller
+- **Windows 10 & Server 2025**: Target and domain controller
 - **Kali Linux**: Attacker machine
 - **Ubuntu Server (22.04.4 LTS)**: Splunk Server host
 - **Splunk Enterprise**: Centralized log analysis platform
@@ -54,21 +55,21 @@ Download from https://www.virtualbox.org/. Install the software with all necessa
 ### 2. Install Guest Operating Systems
 #### a. **Windows 10**
 - Download Windows 10 ISO from Microsoft's official site https://www.microsoft.com/en-ca/software-download/windows10.
-- Allocate: 4096MB RAM, 1 CPU, 50GB disk
+- Allocate: 3072MB RAM, 1 CPU, 40GB disk
 - Boot from ISO and follow standard installation steps.
 
 #### b. **Kali Linux**
 - Download the Kali VM image from https://www.kali.org/
 - Extract using 7-Zip and import into VirtualBox.
 
-#### c. **Windows Server 2022**
-- Download ISO from Microsoft Evaluation Center https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2022.
-- Allocate: 4096MB RAM, 1 CPU, 50GB disk
+#### c. **Windows Server 2025**
+- Download ISO from Microsoft Evaluation Center https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2025.
+- Allocate: 3072MB RAM, 1 CPU, 40GB disk
 - Install Desktop Experience version.
 
 #### d. **Ubuntu Server**
 - Download from https://ubuntu.com/server (v22.04.4 LTS)
-- Allocate: 8192MB RAM, 2 CPUs, 100GB disk
+- Allocate: 4096MB RAM, 2 CPUs, 50GB disk
 - Install and update system:  
   `sudo apt-get update && sudo apt-get upgrade -y`
 
@@ -125,7 +126,7 @@ sudo adduser splunk
 
 - Open the **Start Menu**, search for **"About"**, and open the system settings.
 - Click on **"Rename this PC"**.
-- Rename it to `target-PC`.
+- Rename it to `Target-PC`.
 - Restart the system to apply the changes.
 
 ---
@@ -252,7 +253,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 ```
 ---
 
-#  Windows Server 2022 (ADDC01) Setup Checklist
+#  Windows Server 2025 (Win Server) Setup Checklist
 
 >  Follow the same steps as the Windows 10 (target-PC) setup. Below are the actions to perform on this server.
 
@@ -261,7 +262,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 ##  Configuration Steps
 
 1. **Rename the Computer**
-   - Set the hostname to `ADDC01`
+   - Set the hostname to `Win Server`
    - Restart the system to apply changes
 
 2. **Assign a Static IP Address**
@@ -303,14 +304,14 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 
 ---
 
- Once completed, logs from `ADDC01` will be forwarded to your Splunk server successfully.
+ Once completed, logs from `Win Server` will be forwarded to your Splunk server successfully.
 
 ---
 
 ## Phase 4: Active Directory and Control Domain
 ---
 
-## 🛠️ 1. Setup Active Directory Domain Services on Windows Server (ADDC01)
+## 🛠️ 1. Setup Active Directory Domain Services on Windows Server (Win Server)
 
 ### 🪟 Add the AD DS Role
 
@@ -325,7 +326,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
    - Click **Install**.
 
 > 📌 Once installation completes, you’ll see the message:  
-> `"Configuration required. Installation succeeded on ADDC01."`
+> `"Configuration required. Installation succeeded on Win Server."`
 
 ---
 
@@ -335,7 +336,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 2. Select **"Promote this server to a domain controller"**.
 3. Choose:
    - **Add a new forest**
-   - **Root domain name**: `demodomain.local`
+   - **Root domain name**: `JK.local`
 4. On the Domain Controller Options screen:
    - Leave all defaults checked
    - Create a **DSRM password** (Directory Services Restore Mode)
@@ -345,7 +346,7 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 
 > 🔄 The server will automatically reboot.  
 > 🧑‍💻 After reboot, the login screen should show:  
-> `DEMODOMAIN\Administrator`
+> `JK\Administrator`
 
 ---
 
@@ -353,13 +354,13 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 
 1. In **Server Manager**, go to:  
    `Tools` → `Active Directory Users and Computers`
-2. Right-click on `demodomain.local` → `New` → `Organizational Unit`
+2. Right-click on `JK.local` → `New` → `Organizational Unit`
    - Name: `IT`
 3. Right-click the **IT** OU → `New` → `User`
-   - First Name: `Jenny`
-   - Last Name: `Smith`
-   - Full Name: `Jenny Smith`
-   - User Logon Name: `jsmith`
+   - First Name: `D`
+   - Last Name: `K`
+   - Full Name: `D K`
+   - User Logon Name: `DK`
    - Set a password
 4. Repeat the process:
    - Create another OU called **HR**
@@ -369,11 +370,11 @@ source = XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
 
 ## 💻 2. Join Windows 10 Machine to the Domain
 
-1. On the **Windows 10 (target-PC)**:
+1. On the **Windows 10 (Target-PC)**:
    - Open **Start Menu** → Search: `Advanced System Properties`
    - Click **Change Settings** under **Computer Name**
    - Click **Change...** and check **Domain:**
-     - Enter: `DEMODOMAIN.LOCAL`
+     - Enter: `JK.LOCAL`
 
 2. Configure DNS:
    - Right-click the **Network icon** in system tray → Open **Network & Internet Settings**
@@ -396,15 +397,15 @@ Power up the Kali Linux VM and log in. From the desktop, right-click the connect
 ### *2. Setting up the Attack*
 Run `mkdir ad-project` and `sudo apt-get install -y crowbar`. Now navigate with `cd /usr/share/wordlists`. Verify "rockyou.txt.gz" is present by running `ls`, and unzip it using `sudo gunzip rockyou.txt.gz`. Now copy this file into the directory we made earlier using `cp rockyou.txt ~/Desktop/ad-project`. Now run `cd ~/Desktop/ad-project`. Now we will take the first 20 lines of this file and output it into a new file called passwords.txt using `head -n 20 rockyou.txt > passwords.txt`
 ### *3. Enable Remote Desktop*
-On our target machine, search "This PC" > Properties > Advanced System Settings > Remote > check Allow remote connections to this computer > Select users > Add > Enter the usernames we created earlier such as "jsmith" and "tsmith" > Apply.
+On our target machine, search "This PC" > Properties > Advanced System Settings > Remote > check Allow remote connections to this computer > Select users > Add > Enter the usernames we created earlier such as "DK" and "RK" > Apply.
 ### *4. Attack*
-Navigate back to the Linux machine. `crowbar -h` to get more information about the Crowbar tool. Run `crowbar -b rdp -u tsmith -C passwords.txt -s 192.168.10.100/32`. If a password listed in `passwords.txt` matches a password assigned to the user-specified, you will get a success message with the password attributed to the specified user.
+Navigate back to the Linux machine. `crowbar -h` to get more information about the Crowbar tool. Run `crowbar -b rdp -u DK -C passwords.txt -s 192.168.10.100/32`. If a password listed in `passwords.txt` matches a password assigned to the user-specified, you will get a success message with the password attributed to the specified user.
 ### *5. Analyze Attack Using Splunk*
-We can view all activity of this endpoint using `index=endpoint`, and if we know something happened to Terry's account we can also add `tsmith`. We will notice when we scroll down and select `EventCode` there are 3 events, and one stands out. Value `4625` stands out because it occurred 20 times. A quick Google search (https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625) verifies that this is 60 counts of an account failing to log on. When investigating further, it can be noted that all of the counts are occurring at approximately the same time which is an indication of brute force activity. We also notice an event code `4624` which when is looked into (https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624) we know is an indication of a successful logon. We can expand this event by clicking "Show all x lines", and we can then see the soruce of this logon.
+We can view all activity of this endpoint using `index=endpoint`, and if we know something happened to Terry's account we can also add `DK`. We will notice when we scroll down and select `EventCode` there are 3 events, and one stands out. Value `4625` stands out because it occurred 20 times. A quick Google search (https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625) verifies that this is 60 counts of an account failing to log on. When investigating further, it can be noted that all of the counts are occurring at approximately the same time which is an indication of brute force activity. We also notice an event code `4624` which when is looked into (https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624) we know is an indication of a successful logon. We can expand this event by clicking "Show all x lines", and we can then see the soruce of this logon.
 ### *6. Run Tests on the Target Machine using Atomic Red Team (ART)*
 Open Powershell as administrator. Run `Set-ExecutionPolicy Bypass CurrentUser` > `Y`. Click the up arrow located at the bottom right of your window. Windows Security > Virus & threat protection > Manage Settings > Add or Remove Exclusions > Add an exclusion > Folder > This PC > Local Disk (C:). Now navigate back to PowerShell and run `IEX ( IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);` followed by `Install-AtomicRedTeam -getAtomics` and `Y`.<br><br>Now navigate to the (C:) drive > AtomicRedTeam > Atomics. We can also navigate to https://attack.mitre.org/ in order to view adversary attacks and techniques, as well as use it as a key for the "T" values. Run `Invoke-AtomicTest T1136.001` to T1136 is a persistence, create local account test. After running this test and checking Splunk, we can see that no events popped up with the `NewLocalUser` that was created. This is excellent because we have just identified a gap in our protection. We can continue this with as many tests as we please. This makes Atomic Red Team very valuable for an organization.
 ### *Summary*
 You have reached the end of the walk-through! With the conclusion of the last part of this step-by-step walk-through, you should have a successful setup and communication between 4 Virtual Machines: Windows 10 Target Machine, Kali Linux Attacker Machine, Splunk, and Windows Servers. You should be able to view events with Splunk, test Splunk functionality and defense using Crowbar brute force password cracker, and more. <br><br>
-### Very special thank you to MyDFIR on YouTube for the tutorial. I learned a lot during this process and was able to apply my theoretical knowledge and gain invaluable practical experience. Check his channel out for more tutorials here: https://www.youtube.com/@MyDFIR
+### A sincere thank you to Steven Sir (MyDFIR) for the exceptional project. It provided an excellent opportunity to translate theoretical knowledge into practical experience, greatly enhancing my skills and understanding throughout the process
 
 *Build. Monitor. Defend.*
